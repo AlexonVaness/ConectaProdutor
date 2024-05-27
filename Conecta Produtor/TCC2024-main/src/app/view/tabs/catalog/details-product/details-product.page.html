@@ -1,0 +1,64 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Detalhes do Item</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngIf="item">
+    <ion-card-header>
+      <ion-card-title>{{ item.title }}</ion-card-title>
+    </ion-card-header>
+    <ion-card-content>
+      <ion-img [src]="item.imageUrl" alt="Imagem do item"></ion-img>
+      <ion-list lines="full">
+        <ion-item>
+          <ion-label>Preço</ion-label>
+          <ion-text>{{ item.price | currency: 'BRL' }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Data de Produção</ion-label>
+          <ion-text>{{ item.productionDate | date: 'dd/MM/yyyy' }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Quantidade</ion-label>
+          <ion-text>{{ item.quantity }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Tipo</ion-label>
+          <ion-text>{{ item.type }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Nome do usuário</ion-label>
+          <ion-text>{{ item.nome }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Cidade</ion-label>
+          <ion-text>{{ item.cidade }}</ion-text>
+        </ion-item>
+        <ion-item>
+          <ion-label>Telefone</ion-label>
+          <ion-text>{{ item.telefone }}</ion-text>
+        </ion-item>
+      </ion-list>
+
+      <!-- Adicionar seção para quantidade e botão de adicionar ao carrinho -->
+      <ion-item>
+        <ion-label position="floating">Quantidade</ion-label>
+        <ion-input type="number" [(ngModel)]="quantity" (ionChange)="updateTotal()"></ion-input>
+      </ion-item>
+      <ion-text *ngIf="quantityError" color="danger">
+        Quantidade inválida. Por favor, insira um valor entre 1 e {{ item.quantity }}.
+      </ion-text>
+      <ion-button expand="block" (click)="addToCart()" [disabled]="quantityError || quantity <= 0">
+        Adicionar ao Carrinho
+      </ion-button>
+    </ion-card-content>
+  </ion-card>
+</ion-content>
+
+<ion-footer>
+  <ion-toolbar>
+    <ion-title>Total: {{ total | currency: 'BRL' }}</ion-title>
+  </ion-toolbar>
+</ion-footer>

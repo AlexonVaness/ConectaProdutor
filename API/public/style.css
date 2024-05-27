@@ -1,0 +1,96 @@
+body {
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  background-color: #f8f9fa;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start; /* Alinha os itens ao topo */
+  flex-direction: column;
+  height: 100vh;
+  padding-top: 20px; /* Adiciona algum espaço no topo */
+}
+
+#purchase-details {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto; /* Centraliza horizontalmente */
+  margin-right: auto; /* Centraliza horizontalmente */
+}
+
+#purchase-details h2, #purchase-details h3 {
+  margin: 0 0 15px;
+  color: #333;
+  text-align: center; /* Centraliza o texto */
+}
+
+#items-list {
+  margin-bottom: 20px;
+}
+
+#items-list div {
+  padding: 10px 0;
+  border-bottom: 1px solid #e9ecef;
+  text-align: center; /* Centraliza o texto dos itens */
+}
+
+form {
+  background-color: #fff;
+  border-radius: 8px;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 100%;
+  max-width: 500px;
+  margin-left: auto; /* Centraliza horizontalmente */
+  margin-right: auto; /* Centraliza horizontalmente */
+}
+
+#payment-element {
+  margin-bottom: 20px;
+}
+
+.card-details {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.card-details .element {
+  flex: 1;
+  margin-right: 10px;
+}
+
+.card-details .element:last-child {
+  margin-right: 0;
+}
+
+button {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  width: 100%;
+}
+
+button:disabled {
+  background-color: #6c757d;
+}
+
+.hidden {
+  display: none;
+}
+
+#payment-message {
+  margin-top: 20px;
+  font-size: 16px;
+  color: green;
+  text-align: center; /* Centraliza a mensagem */
+}

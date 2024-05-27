@@ -1,0 +1,26 @@
+.profile-image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  position: relative;
+}
+
+.profile-image {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.profile-image.edit-mode {
+  cursor: pointer;
+}
+
+.profile-image.edit-mode:hover {
+  opacity: 0.8;
+}
+
+input[type="file"] {
+  display: none;
+}

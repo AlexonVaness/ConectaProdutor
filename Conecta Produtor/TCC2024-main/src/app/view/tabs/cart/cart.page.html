@@ -1,0 +1,41 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Carrinho</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <script src="https://js.stripe.com/v3/"></script>
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Carrinho</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <div *ngFor="let producerName of getProducerNames()">
+    <ion-card>
+      <ion-card-header>
+        <ion-card-title>Produtor: {{ producerName }}</ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content>
+        <ion-list>
+          <ion-item *ngFor="let item of groupedCartItems[producerName]">
+            <ion-label>
+              <h2>{{ item.title }}</h2>
+              <p>Preço: {{ item.price | currency }}</p>
+              <p>Quantidade: {{ item.quantity }}</p>
+            </ion-label>
+            <ion-button color="danger" (click)="removeItem(producerName, item.id)">Remover</ion-button>
+          </ion-item>
+        </ion-list>
+
+        <div>
+          <h3>Total: {{ totals[producerName] | currency }}</h3>
+          <ion-button color="danger" (click)="cancelPurchase(producerName)">Cancelar Compra</ion-button>
+          <ion-button expand="block" color="primary" (click)="checkoutForProducer(producerName)">Finalizar Compra</ion-button>
+        </div>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

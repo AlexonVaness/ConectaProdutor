@@ -1,0 +1,7 @@
+{
+  "name": "TCC2024",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

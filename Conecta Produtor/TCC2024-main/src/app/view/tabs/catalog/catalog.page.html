@@ -1,0 +1,67 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title mode="md">Catálogo</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="toggleSearch()">
+        <ion-icon name="search-outline"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+  <ion-toolbar *ngIf="searchActive">
+    <ion-searchbar [(ngModel)]="searchTerm" (ionChange)="searchProducts()"></ion-searchbar>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <div *ngIf="isLoading">
+    <ion-spinner name="crescent"></ion-spinner>
+    <ion-list>
+      <ion-item *ngFor="let i of [1, 2, 3, 4, 5]">
+        <ion-skeleton-text animated style="width: 100%; height: 60px;"></ion-skeleton-text>
+      </ion-item>
+    </ion-list>
+  </div>
+
+  <div *ngIf="!isLoading">
+    <ion-toolbar>
+      <ion-segment [(ngModel)]="selectedType" (ionChange)="filterByType(selectedType)">
+        <ion-segment-button value="all">
+          <ion-icon name="cube-sharp"></ion-icon>
+        </ion-segment-button>
+        <ion-segment-button value="fruta">
+          <i class="fas fa-apple-alt fa-lg"></i>
+        </ion-segment-button>
+        <ion-segment-button value="verdura">
+          <ion-icon name="leaf-sharp"></ion-icon>
+        </ion-segment-button>
+        <ion-segment-button value="semente">
+          <i class="fas fa-seedling fa-lg"></i>
+        </ion-segment-button>
+        <ion-segment-button value="animal">
+          <ion-icon name="paw-sharp"></ion-icon>
+        </ion-segment-button>
+      </ion-segment>
+    </ion-toolbar>
+
+    <ion-list *ngIf="filteredProducts && filteredProducts.length > 0">
+      <ion-item *ngFor="let product of filteredProducts" lines="full">
+        <ng-container *ngIf="product.userId === currentUserUID">
+          <ion-thumbnail slot="start">
+            <img [src]="product.imageUrl" alt="Product Image">
+          </ion-thumbnail>
+          <ion-label>
+            <h2>{{ product.title }}</h2>
+            <p>Preço: R$ {{ product.price }}</p>
+            <p>Data de Produção: {{ product.productionDate }}</p>
+            <p>Vendedor: {{ product.nome }}</p>
+          </ion-label>
+          <ion-icon name="eye-outline" slot="end" *ngIf="product.postId" (click)="verDetalhes(product)"></ion-icon>
+        </ng-container>
+      </ion-item>
+    </ion-list>
+
+    <div *ngIf="filteredProducts.length === 0">
+      <p>Nenhum produto encontrado.</p>
+    </div>
+  </div>
+</ion-content>

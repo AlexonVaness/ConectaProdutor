@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title class="post-title">Postar Item</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="custom-content" scrollY="false">
+  <div class="custom-container">
+    <form [formGroup]="postForm" (ngSubmit)="postItem()">
+      <ion-list class="custom-list">
+        <ion-item class="post-item">
+          <ion-label position="stacked" class="post-label">Título</ion-label>
+          <ion-input type="text" formControlName="title" class="post-input"></ion-input>
+          <div class="error-message" *ngIf="postForm.get('title')?.invalid && postForm.get('title')?.touched">O título é obrigatório e deve começar com uma letra maiúscula.</div>
+        </ion-item>
+        <ion-item class="post-item">
+          <ion-label position="stacked" class="post-label">Data de Produção do Lote</ion-label>
+          <ion-input type="date" formControlName="productionDate" class="post-input"></ion-input>
+        </ion-item>
+        <ion-item class="post-item">
+          <ion-label position="stacked" class="post-label">Preço por Unidade (R$)</ion-label>
+          <ion-input type="number" formControlName="price" class="post-input"></ion-input>
+          <div class="error-message" *ngIf="postForm.get('price')?.invalid && postForm.get('price')?.touched">O preço é obrigatório e deve ser um número válido.</div>
+        </ion-item>
+        <ion-item class="post-item">
+          <ion-label position="stacked" class="post-label">Quantidade Disponível</ion-label>
+          <ion-input type="number" formControlName="quantity" class="post-input"></ion-input>
+          <div class="error-message" *ngIf="postForm.get('quantity')?.invalid && postForm.get('quantity')?.touched">A quantidade é obrigatória e deve ser um número válido.</div>
+        </ion-item>
+        <ion-item class="post-item">
+          <ion-label position="stacked" class="post-label">Tipo de Item</ion-label>
+          <ion-select formControlName="type" interface="action-sheet" class="post-input">
+            <ion-select-option value="Fruta">Fruta</ion-select-option>
+            <ion-select-option value="Verdura">Verdura</ion-select-option>
+            <ion-select-option value="Semente">Semente</ion-select-option>
+            <ion-select-option value="Animal">Animal</ion-select-option>
+            
+          </ion-select>
+        </ion-item>
+        <ion-item class="post-item">
+          <ion-label position="stacked" class="post-label">Imagem</ion-label>
+          <input type="file" (change)="onFileSelected($event)" class="post-input">
+        </ion-item>
+      </ion-list>
+      <ion-button type="submit" expand="block" shape="round" [disabled]="!postForm.valid" class="post-button">Postar Item</ion-button>
+    </form>
+
+    <div class="success-message" *ngIf="successMessage">{{ successMessage }}</div>
+    <div class="error-message" *ngIf="errorMessage">{{ errorMessage }}</div>
+  </div>
+</ion-content>

@@ -1,0 +1,46 @@
+ion-label {
+  font-size: 0.9rem;
+  font-weight: bold;
+}
+
+ion-label h4 {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+ion-label p {
+  font-size: 0.7rem;
+}
+
+ion-item {
+  font-size: 0.8rem;
+}
+
+ion-thumbnail {
+  height: 16vh;
+  width: 35vw;
+}
+
+ion-thumbnail img {
+  border-radius: 5px;
+  height: 100%;
+  width: 100%;
+}
+
+ion-thumbnail h4 {
+  font-size: 1rem;
+}
+
+.distance {
+  font-size: 0.8rem;
+  padding-top: 0.2vh;
+}
+
+.pStyle {
+  padding-bottom: 0.5vh;
+  font-size: 0.8rem;
+}
+
+.pressed {
+  filter: brightness(80%);
+}

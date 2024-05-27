@@ -1,0 +1,48 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-title>Perfil</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-header collapse="condense">
+    <ion-toolbar>
+      <ion-title size="large">Perfil</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-item>
+    <ion-label>Habilitar Edição</ion-label>
+    <ion-toggle [(ngModel)]="editMode" (ionChange)="toggleEditMode()"></ion-toggle>
+  </ion-item>
+
+  <div class="ion-padding page-perfil">
+    <div class="profile-image-container">
+      <img *ngIf="profileImage" [src]="profileImage" class="profile-image" [class.edit-mode]="editMode">
+      <input type="file" (change)="onImageSelected($event)" [disabled]="!editMode">
+      <ion-button expand="block" *ngIf="editMode" (click)="onSelectImageClick()">Selecionar Foto</ion-button>
+    </div>
+
+    <form [formGroup]="profileForm">
+      <ion-item>
+        <ion-label position="floating">Nome</ion-label>
+        <ion-input formControlName="nome" [disabled]="!editMode"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Idade</ion-label>
+        <ion-input formControlName="idade" [disabled]="!editMode"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Cidade</ion-label>
+        <ion-input formControlName="cidade" [disabled]="!editMode"></ion-input>
+      </ion-item>
+      <ion-item>
+        <ion-label position="floating">Telefone</ion-label>
+        <ion-input formControlName="telefone" [disabled]="!editMode"></ion-input>
+      </ion-item>
+      <!-- Adicione outros campos do formulário aqui -->
+    </form>
+
+    <ion-button expand="block" [disabled]="!editMode" (click)="onSave()">Salvar</ion-button>
+  </div>
+</ion-content>
