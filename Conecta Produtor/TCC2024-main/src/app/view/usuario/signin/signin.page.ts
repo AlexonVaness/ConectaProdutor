@@ -30,12 +30,22 @@ export class SigninPage implements OnInit {
     return this.formLogar.controls;
   }
 
-  private logar() {
-    this.authService.signIn(this.formLogar.value['email'], this.formLogar.value['senha']).then((res) => {
-      this.router.navigate(['/tabs/catalog']); // Redirecionar para a página "/tabs"
-    }).catch((error) => {
-      console.log(error.message);
-    });
+  async logar() {
+    try {
+      await this.authService.signIn(this.formLogar.value['email'], this.formLogar.value['senha']);
+      this.router.navigate(['/login-sem-cadastro']); // Redirecionar para a página tabs após login bem-sucedido
+    } catch (error:any) {
+      console.error('Erro ao fazer login:', error?.message || error);
+    }
+  }
+
+  async logarComGoogle() {
+    try {
+      await this.authService.signInWithGoogle();
+      this.router.navigate(['/login-sem-cadastro']); // Redirecionar para a página tabs após login bem-sucedido
+    } catch (error:any) {
+      console.error('Erro ao fazer login com Google:', error?.message || error);
+    }
   }
 
   submitForm(): boolean {
@@ -45,23 +55,6 @@ export class SigninPage implements OnInit {
       this.logar();
       return true;
     }
-  }
-
-  logarComGoogle(): void {
-    this.authService.signInWithGoogle().then((res) => {
-      this.router.navigate(['/login-sem-cadastro']); // Redirecionar para a página de login sem cadastro
-    }).catch((error) => {
-      console.log(error.message);
-    });
-  }
-  
-
-  logarComGitHub(): void {
-    this.authService.signInWithGitHub().then((res) => {
-      this.router.navigate(['/tabs/catalog']); // Redirecionar para a página "/tabs"
-    }).catch((error) => {
-      console.log(error.message);
-    });
   }
 
   irParaSingUp() {

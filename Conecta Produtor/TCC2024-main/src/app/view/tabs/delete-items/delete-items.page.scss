@@ -1,12 +1,15 @@
-ion-label, ion-label h2 {
+ion-header {
+  ion-toolbar {
+    ion-title {
+      font-size: 1.5rem; /* Tamanho maior para o título do cabeçalho */
+      font-weight: bold;
+    }
+  }
+}
+
+ion-label,
+ion-label h2 {
   font-weight: bold;
-}
-
-ion-title.header-title {
-  font-size: 1.5rem; /* Tamanho maior para o título do cabeçalho */
-}
-
-ion-label {
   font-size: 0.9rem;
 }
 
@@ -32,18 +35,7 @@ ion-thumbnail img {
   object-fit: cover;
 }
 
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: calc(100vh - 56px); /* Ajuste para o cabeçalho */
-}
-
-.segment {
-  margin-bottom: 10px; /* Espaçamento inferior entre o segmento e a lista de produtos */
-}
-
+.loading-container,
 .no-products {
   display: flex;
   justify-content: center;

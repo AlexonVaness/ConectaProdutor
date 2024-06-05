@@ -61,7 +61,7 @@ export class DetailsPage implements OnInit {
       console.log('Item selecionado:', this.item);
       console.log('Quantidade selecionada:', this.quantity);
   
-      const requiredFields = ['postId', 'title', 'price', 'nome'];
+      const requiredFields = ['postId', 'title', 'price', 'nome', 'telefone'];
       const missingFields = requiredFields.filter(field => !this.item[field]);
       
       if (missingFields.length > 0) {

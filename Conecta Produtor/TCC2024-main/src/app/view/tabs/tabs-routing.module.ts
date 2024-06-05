@@ -26,14 +26,14 @@ const routes: Routes = [
         loadChildren: () => import('./profile/profile.module').then(m => m.ProfilePageModule)
       },
       {
+        path: 'delete-items',
+        loadChildren: () => import('./delete-items/delete-items.module').then( m => m.DeleteItemsPageModule)
+      },
+      {
         path: 'cart',
         loadChildren: () => import('./cart/cart.module').then( m => m.CartPageModule)
       }
     ]
-  },
-  {
-    path: 'cart',
-    loadChildren: () => import('./cart/cart.module').then( m => m.CartPageModule)
   },
 ];
 

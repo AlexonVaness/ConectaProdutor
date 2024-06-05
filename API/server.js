@@ -1,14 +1,28 @@
-const stripe = require('stripe')('sk_test_51PJjaWLUbG3JGlIp3dGhG7YKejQU4pJ0HLVKGBGFyU4dMkafZNHBXlQrXbXtO0oXcqU5iyz83euheUfkT3WBmhmH00MvurRYDi');
 const express = require('express');
 const cors = require('cors');
-const path = require('path');
 const app = express();
 
-app.use(cors());
+// Permitindo apenas origens específicas
+const allowedOrigins = [
+  'https://tcc2024-359bc.web.app/tabs/cart',
+  // Adicione outras origens permitidas, se necessário
+];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.static('public'));
 
-const YOUR_DOMAIN = 'http://localhost:4242';
+const YOUR_DOMAIN = 'https://api-conecta-produtor.web.app';
 
 app.post('/create-checkout-session', async (req, res) => {
   const { items } = req.body;

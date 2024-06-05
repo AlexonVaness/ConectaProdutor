@@ -1,0 +1,23 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Finalizar Compra</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <div class="content-wrapper">
+    <h2>Confirmação de Compra</h2>
+    <p>Antes de finalizar a compra, recomendamos que entre em contato com o produtor para acertar todos os detalhes da transação. É importante discutir as formas de entrega, verificar a qualidade do produto e esclarecer quaisquer dúvidas ou preocupações que possam surgir.</p>
+    <p>Lembre-se de que uma comunicação clara e aberta com o produtor pode garantir uma experiência de compra satisfatória para ambas as partes.</p>
+  </div>
+
+  <div class="button-group">
+    <ion-button expand="block" color="secondary" (click)="dismiss()">Cancelar</ion-button>
+    <ion-button expand="block" color="primary" (click)="finalizePurchase()">Finalizar Compra</ion-button>
+  </div>
+</ion-content>

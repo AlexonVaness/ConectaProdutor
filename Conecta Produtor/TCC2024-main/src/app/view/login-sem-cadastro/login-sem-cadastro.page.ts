@@ -30,9 +30,9 @@ export class LoginSemCadastroPage implements OnInit {
       nome: ['', [Validators.required, this.nomeValidator]],
       idade: ['', [Validators.required, Validators.pattern('^[0-9]{1,3}$')]],
       cidade: ['', Validators.required],
-      telefone: ['', [Validators.required, Validators.pattern('^\\([0-9]{2}\\)\\s[0-9]{1,10}$')]]
+      telefone: ['', [Validators.required, Validators.pattern('^[0-9]{2}[0-9]{9,11}$')]] // Altere a expressão regular aqui
     });
-  }
+  }  
 
   nomeValidator(control: FormControl) {
     const nome = control.value;

@@ -36,7 +36,6 @@ export class CatalogPage implements OnInit {
       this.loadProducts();
     } else {
       this.isLoading = false;
-      console.error('User not authenticated.');
     }
   }
 
@@ -76,12 +75,14 @@ export class CatalogPage implements OnInit {
     } else {
       this.filteredProducts = this.products.filter(post => {
         const postTypeLowerCase = post.type ? post.type.toLowerCase() : '';
-        return postTypeLowerCase === typeLowerCase &&
-          (!this.searchActive || this.searchTerm.trim() === '' ||
-            post.title.toLowerCase().includes(this.searchTerm.toLowerCase()));
+        const matchesType = postTypeLowerCase === typeLowerCase;
+        const matchesSearchTerm = !this.searchActive || this.searchTerm.trim() === '' ||
+          post.title.toLowerCase().includes(this.searchTerm.toLowerCase());
+        return matchesType && matchesSearchTerm;
       });
     }
   }
+  
 
   isFilterPressed(type: string): boolean {
     return this.selectedType === type;

@@ -2,6 +2,8 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { AuthserviceService } from 'src/app/model/service/authservice.service';
 import { FirebaseService } from 'src/app/model/service/firebase-service.service';
+import { FinalizarCompraModalComponent } from 'src/app/components/finalizar-compra-modal/finalizar-compra-modal.component';
+import { ModalController } from '@ionic/angular';
 
 interface CartItem {
   id: string;
@@ -9,7 +11,10 @@ interface CartItem {
   price: number;
   quantity: number;
   nome: string;
+  imageUrl?: string; // Propriedade opcional
+  whatsappNumber: string; // Número de WhatsApp do produtor
 }
+
 
 @Component({
   selector: 'app-cart',
@@ -22,6 +27,7 @@ export class CartPage implements OnInit {
   totals: { [producerName: string]: number } = {};
 
   constructor(
+    private modalController: ModalController,
     private firebaseService: FirebaseService,
     private authService: AuthserviceService,
     private http: HttpClient
@@ -32,19 +38,34 @@ export class CartPage implements OnInit {
       this.authService.signOut();
       return;
     }
-
+  
     const currentUser = this.authService.getUserLogged();
     if (currentUser) {
       this.firebaseService.getCartItems(currentUser.uid).subscribe(items => {
         this.cartItems = items.map(item => ({
           ...item,
-          nome: item.nome || item.producerId
+          nome: item.nome || item.producerId,
+          imageUrl: item.imageUrl, // Assegure-se de que a URL da imagem está sendo atribuída aqui
+          whatsappNumber: item.whatsappNumber // Inclua o número de WhatsApp
         })) as CartItem[];
+  
+        console.log('Cart items:', this.cartItems);
+  
         this.groupItemsByProducer();
       });
     } else {
       console.error('User not authenticated.');
     }
+  } 
+  async openFinalizarCompraModal(producerName: string) {
+    const modal = await this.modalController.create({
+      component: FinalizarCompraModalComponent,
+      componentProps: {
+        producerName,
+        items: this.groupedCartItems[producerName]
+      }
+    });
+    return await modal.present();
   }
 
   groupItemsByProducer() {
@@ -93,37 +114,25 @@ export class CartPage implements OnInit {
     }
   }
 
-  async checkoutForProducer(producerName: string) {
-    try {
-      const currentUser = this.authService.getUserLogged();
-      if (currentUser) {
-        const items = this.groupedCartItems[producerName].map(item => ({
-          id: item.id,
-          title: item.title,
-          price: item.price,
-          quantity: item.quantity,
-          nome: item.nome,
-        }));
-
-        this.http.post<{ url: string }>('http://localhost:4242/create-checkout-session', { items })
-          .subscribe((response) => {
-            if (response.url) {
-              window.location.href = response.url;
-            } else {
-              console.error('No URL returned for the session');
-            }
-          }, error => {
-            console.error('Error creating checkout session:', error);
-          });
-      } else {
-        console.error('User not authenticated.');
-      }
-    } catch (error) {
-      console.error('Error during checkout:', error);
-    }
-  }
 
   getProducerNames(): string[] {
     return Object.keys(this.groupedCartItems);
   }
+
+  contactViaWhatsApp(producerName: string) {
+    const producerItems = this.groupedCartItems[producerName];
+    if (producerItems && producerItems.length > 0) {
+      const phoneNumber = producerItems[0].whatsappNumber;
+      if (phoneNumber) {
+        const message = encodeURIComponent('Olá, preciso de ajuda com meu pedido.');
+        window.open(`https://wa.me/${phoneNumber}?text=${message}`, '_blank');
+      } else {
+        console.error('Número de WhatsApp do produtor não disponível.');
+      }
+    } else {
+      console.error('Itens do produtor não encontrados.');
+    }
+  }
+  
+  
 }

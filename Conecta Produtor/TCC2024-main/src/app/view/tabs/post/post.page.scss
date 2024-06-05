@@ -1,11 +1,11 @@
 page-post {
-  background-color: var(--ion-color-light); /* Fundo cinza quase branco */
+  background-color: var(--ion-color-light);
 
   .post-title {
     font-weight: bold;
     font-size: 1.5em;
     margin-bottom: 20px;
-    color: black; /* Fonte em preto */
+    color: white !important;
   }
 
   .post-item {
@@ -19,13 +19,13 @@ page-post {
   }
 
   .post-label {
-    color: black; /* Fonte em preto */
+    color: black;
     font-weight: bold;
   }
 
   .post-input {
     border-radius: 5px;
-    border: 1px solid black; /* Bordas pretas */
+    border: 1px solid black;
     padding: 10px;
   }
 
@@ -43,26 +43,25 @@ page-post {
   }
 
   .post-button {
-    margin: 20px auto; /* Centralizado */
-    --background: var(--ion-color-success); /* Botão verde */
+    margin: 20px auto;
+    --background: var(--ion-color-success);
     --border-radius: 5px;
     --box-shadow: none;
-    --color: black; /* Fonte em preto */
-    --padding-start: 10px; /* Reduzindo o padding */
-    --padding-end: 10px; /* Reduzindo o padding */
-    border-left: 3px solid var(--ion-color-success); /* Adicionando borda à esquerda */
-    border-right: 3px solid var(--ion-color-success); /* Adicionando borda à direita */
+    --color: black;
+    --padding-start: 10px;
+    --padding-end: 10px;
+    border-left: 3px solid var(--ion-color-success);
+    border-right: 3px solid var(--ion-color-success);
   }
 
   input[type="file"] {
     display: none;
   }
 
-  // Adicionando um estilo para o botão de seleção de arquivo personalizado
   .custom-file-input {
     display: inline-block;
-    background-color: var(--ion-color-success); /* Alterado para verde */
-    color: black; /* Fonte em preto */
+    background-color: var(--ion-color-success);
+    color: black;
     border: none;
     padding: 10px 20px;
     border-radius: 5px;
@@ -73,7 +72,7 @@ page-post {
 ion-header {
   ion-toolbar {
     ion-title {
-      color: black; /* Fonte em preto */
+      color: black;
     }
   }
 }
@@ -84,24 +83,14 @@ ion-content.custom-content {
       .custom-list {
         ion-item {
           ion-label {
-            color: black; /* Fonte em preto */
+            color: black;
           }
           ion-input,
           ion-datetime {
-            border-color: black; /* Bordas pretas */
+            border-color: black;
           }
         }
       }
     }
   }
-}
-
-.success-message {
-  color: var(--ion-color-success); /* Alterado para verde */
-  margin-top: 10px;
-}
-
-.error-message {
-  color: var(--ion-color-danger);
-  margin-top: 10px;
 }

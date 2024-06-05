@@ -1,0 +1,31 @@
+ion-content {
+  .content-wrapper {
+    margin-bottom: 20px;
+
+    h2 {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+    }
+
+    p {
+      margin-bottom: 15px;
+      font-size: 1.1em;
+    }
+  }
+
+  .button-group {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+  }
+
+  ion-button {
+    --border-radius: 8px;
+    --box-shadow: none;
+    --background: var(--ion-color-light);
+    --background-hover: var(--ion-color-light-tint);
+    --color: var(--ion-color-dark);
+    --color-hover: var(--ion-color-dark-contrast);
+    --ion-color-base: var(--ion-color-primary);
+  }
+}

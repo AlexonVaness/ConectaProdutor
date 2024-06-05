@@ -1,0 +1,50 @@
+ion-title.header-title {
+  font-size: 1.5rem; /* Tamanho maior para o título do cabeçalho */
+}
+
+.card-header-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.whatsapp-button {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.whatsapp-button ion-icon {
+  font-size: 24px;
+}
+
+.product-thumbnail {
+  height: 16vh;
+  width: 16vh; /* Largura igual à altura para imagens quadradas */
+  max-width: 35vw;
+}
+
+ion-thumbnail img {
+  border-radius: 5px;
+  height: 100%;
+  width: 100%;
+  object-fit: cover;
+}
+
+.product-description {
+  font-size: 1rem; /* Tamanho maior para a descrição do produto */
+  line-height: 1.5; /* Espaçamento entre linhas aumentado para melhor legibilidade */
+}
+
+.button-group {
+  display: flex;
+  justify-content: space-between;
+}
+
+ion-button {
+  --background: none;
+}
+
+ion-button ion-icon {
+  font-size: 20px;
+}

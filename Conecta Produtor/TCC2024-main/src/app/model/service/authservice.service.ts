@@ -2,17 +2,20 @@ import { Injectable, NgZone } from '@angular/core';
 import { FirebaseService } from './firebase-service.service';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
-import { getAuth, signInWithPopup, browserPopupRedirectResolver, GoogleAuthProvider, GithubAuthProvider, User as FirebaseUser } from 'firebase/auth';
-import { User as AngularFireUser } from '@firebase/auth-types';
+import { getAuth, signInWithPopup, GoogleAuthProvider, User as AngularFireUser } from 'firebase/auth';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthserviceService {
-
   usuarioDados: AngularFireUser | null = null;
 
-  constructor(private firebase: FirebaseService, private fireAuth: AngularFireAuth, private router: Router, private ngZone: NgZone) {
+  constructor(
+    private firebase: FirebaseService,
+    private fireAuth: AngularFireAuth,
+    private router: Router,
+    private ngZone: NgZone
+  ) {
     this.fireAuth.authState.subscribe(user => {
       if (user) {
         this.usuarioDados = user as AngularFireUser;
@@ -26,21 +29,24 @@ export class AuthserviceService {
   public async signIn(email: string, password: string): Promise<void> {
     try {
       const result = await this.fireAuth.signInWithEmailAndPassword(email, password);
-      this.ngZone.run(() => {
-        this.router.navigate(['']);
-      });
-      this.setUserData(result.user);
+      this.setUserData(result.user as AngularFireUser);
+      console.log('Login com email e senha bem-sucedido:', result.user);
+      console.log('UID do usuário:', result.user?.uid);
     } catch (error) {
       console.error('Erro ao fazer login:', error);
+      throw error;
     }
   }
+  
 
   public async signUpWithEmailAndPassword(email: string, password: string): Promise<void> {
     try {
       const result = await this.fireAuth.createUserWithEmailAndPassword(email, password);
-      this.setUserData(result.user);
+      this.setUserData(result.user as AngularFireUser);
+      console.log('Registro de usuário bem-sucedido:', result.user);
     } catch (error) {
       console.error('Erro ao registrar usuário:', error);
+      throw error; // Lançar erro para ser capturado na chamada do método
     }
   }
 
@@ -50,6 +56,7 @@ export class AuthserviceService {
       console.log('Email de recuperação enviado');
     } catch (error) {
       console.error('Erro ao enviar email de recuperação:', error);
+      throw error; // Lançar erro para ser capturado na chamada do método
     }
   }
 
@@ -58,8 +65,10 @@ export class AuthserviceService {
       await this.fireAuth.signOut();
       localStorage.removeItem('user');
       this.router.navigate(['signin']);
+      console.log('Logout bem-sucedido');
     } catch (error) {
       console.error('Erro ao fazer logout:', error);
+      throw error; // Lançar erro para ser capturado na chamada do método
     }
   }
 
@@ -72,6 +81,7 @@ export class AuthserviceService {
     const user = JSON.parse(localStorage.getItem('user') || 'null');
     return user ? (user as AngularFireUser) : null;
   }
+  
 
   public isLoggedIn(): boolean {
     const user = this.getUserLogged();
@@ -82,21 +92,12 @@ export class AuthserviceService {
     const provider = new GoogleAuthProvider();
     const auth = getAuth();
     try {
-      const result = await signInWithPopup(auth, provider, browserPopupRedirectResolver);
+      const result = await signInWithPopup(auth, provider);
       this.setUserData(result.user as AngularFireUser);
+      console.log('Login com Google bem-sucedido:', result.user);
     } catch (error) {
       console.error('Erro ao fazer login com Google:', error);
-    }
-  }
-
-  public async signInWithGitHub(): Promise<void> {
-    const provider = new GithubAuthProvider();
-    const auth = getAuth();
-    try {
-      const result = await signInWithPopup(auth, provider, browserPopupRedirectResolver);
-      this.setUserData(result.user as AngularFireUser);
-    } catch (error) {
-      console.error('Erro ao fazer login com GitHub:', error);
+      throw error; // Lançar erro para ser capturado na chamada do método
     }
   }
 
@@ -113,6 +114,10 @@ export class AuthserviceService {
     if (user) {
       this.usuarioDados = user;
       localStorage.setItem('user', JSON.stringify(this.usuarioDados));
+      // Redirecionar para a página após o login
+      this.ngZone.run(() => {
+        this.router.navigate(['login-sem-cadastro']); // Redirecionar para a página tabs após login bem-sucedido
+      });
     } else {
       localStorage.removeItem('user');
     }

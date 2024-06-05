@@ -1,3 +1,25 @@
+ion-header {
+  ion-toolbar {
+    ion-title {
+      font-size: 1.5rem; /* Tamanho maior para o título do cabeçalho */
+      font-weight: bold;
+    }
+  }
+}
+
+ion-label,
+ion-label[stacked] {
+  font-size: 0.9rem;
+}
+
+ion-item {
+  font-size: 0.8rem;
+}
+
+ion-button[expand="block"] {
+  margin-top: 20px; /* Espaçamento superior para o botão de salvar */
+}
+
 .profile-image-container {
   display: flex;
   justify-content: center;
