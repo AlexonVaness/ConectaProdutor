@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms'; // Importando FormGroup de @angular/forms
+import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthserviceService } from 'src/app/model/service/authservice.service'; 
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-signup',
@@ -8,15 +9,20 @@ import { AuthserviceService } from 'src/app/model/service/authservice.service';
   styleUrls: ['./signup.page.scss'],
 })
 export class SignupPage implements OnInit {
-  formCadastrar!: FormGroup; // Certifique-se de que FormGroup está sendo importado corretamente
+  formCadastrar!: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
-    private authService: AuthserviceService
+    private authService: AuthserviceService,
+    private router: Router
   ) {}
 
   ngOnInit() {
     this.formCadastrar = this.formBuilder.group({
+      nome: ['', Validators.required],
+      idade: ['', [Validators.required, Validators.pattern('^[0-9]{1,3}$')]],
+      cidade: ['', Validators.required],
+      telefone: ['', [Validators.required, Validators.pattern('^[0-9]{2}[0-9]{9,11}$')]],
       email: ['', [Validators.required, Validators.email]],
       senha: ['', [Validators.required, Validators.minLength(6)]],
       confsenha: ['', [Validators.required, Validators.minLength(6)]]
@@ -34,8 +40,18 @@ export class SignupPage implements OnInit {
           this.formCadastrar.value['email'],
           this.formCadastrar.value['senha']
         );
-      } catch (error: any) { 
-        console.log(error.message); 
+        const userData = {
+          nome: this.formCadastrar.value['nome'],
+          idade: this.formCadastrar.value['idade'],
+          cidade: this.formCadastrar.value['cidade'],
+          telefone: this.formCadastrar.value['telefone'],
+          email: this.formCadastrar.value['email'],
+          profileImage: ''
+        };
+        await this.authService.saveProfileData(userData);
+        this.router.navigate(['/login-sem-cadastro']); // Navegue para a página de login ou outra página após o cadastro
+      } catch (error: any) {
+        console.log(error.message);
       }
     } else {
       console.error('Formulário inválido ou senhas não coincidem.');

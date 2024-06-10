@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { FirebaseService } from 'src/app/model/service/firebase-service.service';
 import { AuthserviceService } from 'src/app/model/service/authservice.service';
+import { AlertController } from '@ionic/angular';
 
 @Component({
   selector: 'app-delete-items',
@@ -13,7 +14,8 @@ export class DeleteItemsPage implements OnInit {
 
   constructor(
     private firebaseService: FirebaseService,
-    private authService: AuthserviceService
+    private authService: AuthserviceService,
+    private alertController: AlertController,
   ) { }
 
   ngOnInit() {
@@ -39,34 +41,41 @@ export class DeleteItemsPage implements OnInit {
       );
     }
   }  
+  public async confirmDeletePost(postId: string): Promise<void> {
+    const alert = await this.alertController.create({
+      header: 'Confirmar Exclusão',
+      message: 'Você tem certeza que deseja excluir este post?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Exclusão cancelada');
+          }
+        },
+        {
+          text: 'Excluir',
+          handler: async () => {
+            await this.deletePost(postId);
+            await alert.dismiss(); // Garantir que o popup seja fechado
+          }
+        }
+      ]
+    });
+
+    await alert.present();
+  }
+
 
   public async deletePost(postId: string): Promise<void> {
     try {
-      console.log('ID do post a ser excluído:', postId);
-  
-      const user = await this.authService.getCurrentUser();
-      if (user) {
-        console.log('Usuário autenticado:', user);
-        // Verifica se o usuário tem permissão para excluir o post
-        const post = await this.firebaseService.getItemById(postId).toPromise();
-        console.log('Post encontrado:', post);
-        if (post && post.userId === user.uid) {
-          console.log('Usuário tem permissão para excluir o post.');
-          // Remove o post
-          await this.firebaseService.deletePost(postId);
-          console.log('Post deletado com sucesso.');
-        } else {
-          console.error('Usuário não tem permissão para excluir este post.');
-        }
-      } else {
-        console.error('Usuário não autenticado.');
-      }
+      await this.firebaseService.deleteItem(postId);
+      console.log('Post deletado com sucesso.');
+      this.loadUserProducts();
     } catch (error) {
       console.error('Erro ao deletar post:', error);
-      throw error;
     }
   }
-  
   
   
 }

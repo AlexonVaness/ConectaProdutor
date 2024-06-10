@@ -1,13 +1,21 @@
+/* Seletor para o título no cabeçalho */
 ion-title.header-title {
   font-size: 1.5rem; /* Tamanho maior para o título do cabeçalho */
 }
+.header-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: var(--ion-color-primary); /* Cor do título */
+}
 
+/* Estilo para o conteúdo do cabeçalho da carta */
 .card-header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
 
+/* Estilo para o botão do WhatsApp */
 .whatsapp-button {
   display: flex;
   flex-direction: column;
@@ -18,12 +26,14 @@ ion-title.header-title {
   font-size: 24px;
 }
 
+/* Estilo para a miniatura do produto */
 .product-thumbnail {
   height: 16vh;
   width: 16vh; /* Largura igual à altura para imagens quadradas */
   max-width: 35vw;
 }
 
+/* Estilo para a imagem dentro da miniatura */
 ion-thumbnail img {
   border-radius: 5px;
   height: 100%;
@@ -31,20 +41,26 @@ ion-thumbnail img {
   object-fit: cover;
 }
 
+/* Estilo para a descrição do produto */
 .product-description {
   font-size: 1rem; /* Tamanho maior para a descrição do produto */
   line-height: 1.5; /* Espaçamento entre linhas aumentado para melhor legibilidade */
 }
 
+/* Estilo para o grupo de botões */
 .button-group {
   display: flex;
   justify-content: space-between;
 }
 
+/* Estilo para os botões */
 ion-button {
-  --background: none;
+  --background: var(--ion-color-primary); /* Cor de fundo dos botões */
+  color: #ffffff; /* Cor do texto dos botões */
+  --border-radius: 8px; /* Raio da borda dos botões */
 }
 
+/* Estilo para o ícone dentro dos botões */
 ion-button ion-icon {
-  font-size: 20px;
+  font-size: 20px; /* Tamanho do ícone */
 }

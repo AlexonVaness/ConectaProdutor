@@ -5,7 +5,7 @@ import { FirebaseService } from 'src/app/model/service/firebase-service.service'
 import { FinalizarCompraModalComponent } from 'src/app/components/finalizar-compra-modal/finalizar-compra-modal.component';
 import { ModalController } from '@ionic/angular';
 
-interface CartItem {
+export interface CartItem {
   id: string;
   title: string;
   price: number;
@@ -41,22 +41,27 @@ export class CartPage implements OnInit {
   
     const currentUser = this.authService.getUserLogged();
     if (currentUser) {
-      this.firebaseService.getCartItems(currentUser.uid).subscribe(items => {
-        this.cartItems = items.map(item => ({
-          ...item,
-          nome: item.nome || item.producerId,
-          imageUrl: item.imageUrl, // Assegure-se de que a URL da imagem está sendo atribuída aqui
-          whatsappNumber: item.whatsappNumber // Inclua o número de WhatsApp
-        })) as CartItem[];
+      this.firebaseService.getCartItems(currentUser.uid).subscribe(async items => {
+        // Filtrar os itens para garantir que apenas os que ainda existem na coleção posts sejam exibidos
+        const existingItems = await Promise.all(
+          items.map(async item => ({
+            ...item,
+            exists: await this.firebaseService.checkIfItemExists(item.postId)
+          }))
+        );
   
-        console.log('Cart items:', this.cartItems);
+        // Remover os itens que não existem mais
+        this.cartItems = existingItems.filter(item => item.exists);
   
+        // Agrupar os itens novamente
         this.groupItemsByProducer();
       });
     } else {
       console.error('User not authenticated.');
     }
-  } 
+  }
+   
+
   async openFinalizarCompraModal(producerName: string) {
     const modal = await this.modalController.create({
       component: FinalizarCompraModalComponent,
@@ -92,7 +97,7 @@ export class CartPage implements OnInit {
     try {
       const currentUser = this.authService.getUserLogged();
       if (currentUser) {
-        await this.firebaseService.removeItemFromCart(currentUser.uid, itemId);
+        await this.firebaseService.removeItemFromCart(currentUser.uid, itemId, this.cartItems); // passe cartItems como argumento
         this.cartItems = this.cartItems.filter(item => item.id !== itemId);
         this.groupItemsByProducer();
       }
@@ -100,6 +105,11 @@ export class CartPage implements OnInit {
       console.error('Error removing item from cart:', error);
     }
   }
+  
+  
+  
+  
+  
 
   async cancelPurchase(producerName: string) {
     try {

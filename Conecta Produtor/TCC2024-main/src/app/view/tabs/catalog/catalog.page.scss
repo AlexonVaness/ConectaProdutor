@@ -1,52 +1,80 @@
-ion-label, ion-label h2 {
+/* catalog.page.scss */
+
+.catalog-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+}
+
+.header-title {
+  font-size: 24px;
   font-weight: bold;
+  color: var(--ion-color-primary); /* Cor do título */
 }
 
-ion-title.header-title {
-  font-size: 1.5rem; /* Tamanho maior para o título do cabeçalho */
+.segment {
+  margin: 0 16px;
 }
 
-ion-label {
-  font-size: 0.9rem;
+.segment-button {
+  color: var(--ion-color-primary); /* Cor do texto dos botões */
 }
 
-ion-label.product-description {
-  font-size: 1rem; /* Tamanho maior para a descrição do produto */
-  line-height: 1.5; /* Espaçamento entre linhas aumentado para melhor legibilidade */
+
+.product-card {
+  margin: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.1);
+  border-radius: 8px;
 }
 
-ion-item {
-  font-size: 0.8rem;
+.product-item {
+  display: flex;
+  align-items: center;
 }
 
-ion-thumbnail.product-thumbnail {
+.product-thumbnail {
   height: 16vh;
   width: 16vh; /* Largura igual à altura para imagens quadradas */
   max-width: 35vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: auto;
 }
 
-ion-thumbnail img {
+.product-thumbnail img {
   border-radius: 5px;
   height: 100%;
   width: 100%;
   object-fit: cover;
 }
 
-.loading-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: calc(100vh - 56px); /* Ajuste para o cabeçalho */
+.product-description {
+  margin-left: 16px;
 }
 
-.segment {
-  margin-bottom: 10px; /* Espaçamento inferior entre o segmento e a lista de produtos */
+.product-description h2 {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.product-description p {
+  margin: 4px 0;
 }
 
 .no-products {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100vh - 56px); /* Ajuste para o cabeçalho */
+  height: 100%;
+  font-size: 18px;
+  color: #888;
+}
+
+.details-icon {
+  font-size: 24px; /* Aumentando o tamanho do ícone */
+  color: var(--ion-color-primary); /* Adicionando uma cor de destaque */
 }

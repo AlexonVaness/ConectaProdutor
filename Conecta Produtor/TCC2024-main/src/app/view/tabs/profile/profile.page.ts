@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthserviceService } from 'src/app/model/service/authservice.service';
 import { FirebaseService } from 'src/app/model/service/firebase-service.service';
-import { AngularFireStorage } from '@angular/fire/compat/storage'; // Adicione a importação para o AngularFireStorage
+import { AngularFireStorage } from '@angular/fire/compat/storage';
 import { Router } from '@angular/router';
 
 @Component({
@@ -43,7 +43,7 @@ export class ProfilePage implements OnInit {
     private formBuilder: FormBuilder,
     private authService: AuthserviceService,
     private firebaseService: FirebaseService,
-    private storage: AngularFireStorage, // Injete o AngularFireStorage no construtor´
+    private storage: AngularFireStorage,
     private router: Router
   ) {
     this.profileForm = this.formBuilder.group({
@@ -58,17 +58,23 @@ export class ProfilePage implements OnInit {
     this.authService.getCurrentUser().then(user => {
       if (user) {
         this.userId = user.uid;
+        console.log('User ID:', this.userId); // Log do ID do usuário
         this.loadUserProfile();
       } else {
+        console.log('No user logged in'); // Log quando não há usuário logado
         this.router.navigate(['/signin']);
       }
+    }).catch(error => {
+      console.error('Error getting current user:', error); // Log de erro na obtenção do usuário
     });
+
     this.profileForm.valueChanges.subscribe(() => this.onValueChanged());
   }
 
   loadUserProfile() {
     this.firebaseService.getCurrentUserData().then((userProfile: any) => {
       if (userProfile) {
+        console.log('User profile data:', userProfile); // Log dos dados do perfil do usuário
         this.profileForm.patchValue({
           nome: userProfile.nome,
           idade: userProfile.idade,
@@ -76,7 +82,11 @@ export class ProfilePage implements OnInit {
           telefone: userProfile.telefone
         });
         this.profileImage = userProfile.profileImage || '';
+      } else {
+        console.log('No user profile data found'); // Log quando não há dados do perfil
       }
+    }).catch(error => {
+      console.error('Error getting user profile data:', error); // Log de erro na obtenção dos dados do perfil
     });
   }
 

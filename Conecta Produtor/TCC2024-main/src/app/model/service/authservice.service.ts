@@ -42,6 +42,17 @@ export class AuthserviceService {
   public async signUpWithEmailAndPassword(email: string, password: string): Promise<void> {
     try {
       const result = await this.fireAuth.createUserWithEmailAndPassword(email, password);
+      // Salvar os dados do perfil do usuário no Firestore
+      const userData = {
+        uid: result.user?.uid,
+        email: result.user?.email,
+        nome: '', // Defina valores padrão ou peça para o usuário preencher após o registro
+        idade: '',
+        cidade: '',
+        telefone: '',
+        profileImage: ''
+      };
+      await this.firebase.saveUserData(result.user?.uid || '', userData);
       this.setUserData(result.user as AngularFireUser);
       console.log('Registro de usuário bem-sucedido:', result.user);
     } catch (error) {
@@ -49,6 +60,7 @@ export class AuthserviceService {
       throw error; // Lançar erro para ser capturado na chamada do método
     }
   }
+  
 
   public async recoverPassword(email: string): Promise<void> {
     try {

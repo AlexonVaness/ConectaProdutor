@@ -21,31 +21,47 @@
       </ion-item>
     </ion-list>
   </div>
+  
+  <ion-toolbar *ngIf="!isLoading">
+    <ion-segment [(ngModel)]="selectedType" (ionChange)="filterByType(selectedType)">
+      <ion-segment-button value="all">
+        <ion-icon name="cube-sharp"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="fruta">
+        <i class="fas fa-apple-alt fa-lg"></i> <!-- Ícone de maçã -->
+      </ion-segment-button>
+      <ion-segment-button value="verdura">
+        <ion-icon name="leaf-sharp"></ion-icon>
+      </ion-segment-button>
+      <ion-segment-button value="semente">
+        <i class="fas fa-seedling fa-lg"></i> <!-- Ícone de semente -->
+      </ion-segment-button>
+      <ion-segment-button value="animal">
+        <ion-icon name="paw-sharp"></ion-icon>
+      </ion-segment-button>
+    </ion-segment>
+  </ion-toolbar>
 
   <div *ngIf="!isLoading">
-    <ion-toolbar>
-      <ion-segment [(ngModel)]="selectedType" (ionChange)="filterByType(selectedType)" class="segment">
-        <!-- Segment buttons aqui -->
-      </ion-segment>
-    </ion-toolbar>
     <ion-list *ngIf="filteredProducts && filteredProducts.length > 0">
-      <ion-item lines="none" *ngFor="let product of filteredProducts">
-        <ion-thumbnail slot="start" class="product-thumbnail">
-          <img [src]="product.imageUrl" alt="Product Image">
-        </ion-thumbnail>
-        <ion-label class="product-description">
-          <h2>{{ product.title }}</h2>
-          <p class="description">Preço: R$ {{ product.price }}</p>
-          <p class="description">Data de Produção: {{ product.productionDate }}</p>
-          <p class="description">Vendedor: {{ product.nome }}</p>
-        </ion-label>
-        <ion-icon name="eye-outline" slot="end" *ngIf="product.postId" (click)="verDetalhes(product)"></ion-icon>
-      </ion-item>
+      <ion-card *ngFor="let product of filteredProducts" class="product-card">
+        <ion-item lines="none" class="product-item">
+          <ion-thumbnail slot="start" class="product-thumbnail">
+            <img [src]="product.imageUrl" alt="Product Image">
+          </ion-thumbnail>
+          <ion-label class="product-description">
+            <h2>{{ product.title }}</h2>
+            <p class="description">Preço: R$ {{ product.price }}</p>
+            <p class="description">Data de Produção: {{ product.productionDate }}</p>
+            <p class="description">Vendedor: {{ product.nome }}</p>
+          </ion-label>
+          <ion-icon name="eye-outline" slot="end" *ngIf="product.postId" (click)="verDetalhes(product)" class="details-icon"></ion-icon>
+        </ion-item>
+      </ion-card>
     </ion-list>
     
     <div *ngIf="filteredProducts.length === 0" class="no-products">
       <p>Nenhum produto encontrado.</p>
     </div>
-    
   </div>
 </ion-content>

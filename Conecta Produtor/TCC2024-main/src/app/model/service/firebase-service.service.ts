@@ -4,6 +4,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
 import { Observable, combineLatest, of } from 'rxjs';
 import { map, switchMap } from 'rxjs/operators';
+import {CartItem} from '../../view/tabs/cart/cart.page'
 
 @Injectable({
   providedIn: 'root'
@@ -22,26 +23,22 @@ export class FirebaseService {
   public async getCurrentUserData(): Promise<any> {
     const user = await this.fireAuth.currentUser;
     if (user) {
-      const uid = user.uid;
-      const docRef = this.firestore.collection(this.USER_PATH).doc(uid);
-  
-      try {
-        const doc = await docRef.get().toPromise();
-        if (doc && doc.exists) {
-          const userData = doc.data() as { [key: string]: any };
-          return { ...userData, uid };
-        } else {
-          console.error("User document does not exist.");
-          return null;
-        }
-      } catch (error) {
-        console.error("Error getting user document:", error);
+      const userDoc = await this.firestore.collection('users').doc(user.uid).get().toPromise();
+      if (userDoc && userDoc.exists) {
+        console.log('User profile data from Firestore:', userDoc.data());
+        return userDoc.data();
+      } else {
+        console.log('No user profile data found in Firestore');
         return null;
       }
     } else {
-      console.error("User not authenticated.");
+      console.log('No user currently logged in');
       return null;
     }
+  }
+
+  public async saveUserData(uid: string, data: any): Promise<void> {
+    await this.firestore.collection('users').doc(uid).set(data, { merge: true });
   }
 
   public getItemById(postId: string): Observable<any> {
@@ -81,15 +78,6 @@ export class FirebaseService {
     return this.firestore.collection('posts').valueChanges();
   }
 
-  public async saveUserData(uid: string, userData: any): Promise<void> {
-    try {
-      await this.firestore.collection(this.USER_PATH).doc(uid).set(userData);
-      console.log('Dados do usuário salvos com sucesso.');
-    } catch (error) {
-      console.error('Erro ao salvar dados do usuário:', error);
-      throw error;
-    }
-  }
 
   public async addToCart(item: any, quantity: number): Promise<void> {
     const user = await this.fireAuth.currentUser;
@@ -137,30 +125,43 @@ export class FirebaseService {
     return this.firestore.collection(this.PRODUCT_PATH, ref => ref.where('userId', '==', uid)).valueChanges();
   }  
 
-  public async deletePost(postId: string): Promise<void> {
+  public async deleteItem(postId: string): Promise<void> {
     try {
-      await this.firestore.collection('posts').doc(postId).delete();
-      console.log('Post deletado com sucesso.');
+      await this.firestore.collection(this.PRODUCT_PATH).doc(postId).delete();
     } catch (error) {
-      console.error('Erro ao deletar post:', error);
       throw error;
     }
   }
-     
 
-  public async removeItemFromCart(userId: string, itemId: string): Promise<void> {
+  public async checkIfItemExists(postId: string): Promise<boolean> {
+    try {
+      const doc = await this.firestore.collection(this.PRODUCT_PATH).doc(postId).get().toPromise();
+      return doc?.exists ?? false;
+    } catch (error) {
+      console.error('Error checking if item exists:', error);
+      throw error;
+    }
+  }
+  
+
+  public async removeItemFromCart(userId: string, itemId: string, cartItems: CartItem[]): Promise<void> {
     try {
       const itemRef = this.firestore.collection(`cart/${userId}/items`).doc(itemId);
       const doc = await itemRef.get().toPromise();
       if (doc && doc.exists) {
-        const item = doc.data() as { quantity: number };
-        const newQuantity = item.quantity - 1;
-        if (newQuantity > 0) {
-          await itemRef.update({ quantity: newQuantity });
+        const item = doc.data() as CartItem;
+        if (item.quantity > 1) {
+          await itemRef.update({ quantity: item.quantity - 1 });
         } else {
           await itemRef.delete();
         }
-        console.log('Item removido ou atualizado com sucesso.');
+        console.log('Item removido ou quantidade atualizada com sucesso.');
+  
+        // Remover o item excluído da lista de itens do carrinho localmente
+        const index = cartItems.findIndex(cartItem => cartItem.id === itemId);
+        if (index !== -1) {
+          cartItems.splice(index, 1);
+        }
       } else {
         console.error('Item não encontrado no carrinho.');
       }
@@ -169,6 +170,9 @@ export class FirebaseService {
       throw error;
     }
   }
+  
+  
+  
 
   public getCartItems(uid: string): Observable<any[]> {
     return this.firestore.collection(`cart/${uid}/items`).snapshotChanges().pipe(

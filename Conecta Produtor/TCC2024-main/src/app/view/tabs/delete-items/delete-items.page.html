@@ -19,7 +19,7 @@
         <p>Data de Produção: {{ product.productionDate }}</p>
         <p>Vendedor: {{ product.nome }}</p>
       </ion-label>
-      <ion-button color="danger" slot="end" (click)="deletePost(product.postId)">Excluir</ion-button>
+      <ion-button color="danger" slot="end" (click)="confirmDeletePost(product.postId)">Excluir</ion-button>
     </ion-item>
   </ion-list>
 </ion-content>
