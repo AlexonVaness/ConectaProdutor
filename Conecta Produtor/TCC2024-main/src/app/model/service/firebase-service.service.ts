@@ -25,8 +25,18 @@ export class FirebaseService {
     if (user) {
       const userDoc = await this.firestore.collection('users').doc(user.uid).get().toPromise();
       if (userDoc && userDoc.exists) {
-        console.log('User profile data from Firestore:', userDoc.data());
-        return userDoc.data();
+        const data = userDoc.data();
+        console.log('User profile data from Firestore:', data);
+        // Verifica se 'data' é um objeto antes de espalhar
+        if (data && typeof data === 'object') {
+          return {
+            uid: user.uid, // Adicionando uid aqui
+            ...data
+          };
+        } else {
+          console.log('Invalid user profile data');
+          return { uid: user.uid }; // Retorna apenas uid se os dados não forem válidos
+        }
       } else {
         console.log('No user profile data found in Firestore');
         return null;
@@ -36,6 +46,8 @@ export class FirebaseService {
       return null;
     }
   }
+  
+  
 
   public async saveUserData(uid: string, data: any): Promise<void> {
     await this.firestore.collection('users').doc(uid).set(data, { merge: true });
@@ -170,7 +182,6 @@ export class FirebaseService {
       throw error;
     }
   }
-  
   
   
 

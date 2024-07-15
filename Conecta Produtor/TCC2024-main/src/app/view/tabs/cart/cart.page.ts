@@ -5,6 +5,7 @@ import { FirebaseService } from 'src/app/model/service/firebase-service.service'
 import { FinalizarCompraModalComponent } from 'src/app/components/finalizar-compra-modal/finalizar-compra-modal.component';
 import { ModalController } from '@ionic/angular';
 
+
 export interface CartItem {
   id: string;
   title: string;

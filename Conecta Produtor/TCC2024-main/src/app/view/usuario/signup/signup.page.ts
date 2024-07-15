@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthserviceService } from 'src/app/model/service/authservice.service'; 
 import { Router } from '@angular/router';
+import { AlertcontrollerService } from '../../../model/service/alert-controller.service';
 
 @Component({
   selector: 'app-signup',
@@ -14,7 +15,8 @@ export class SignupPage implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthserviceService,
-    private router: Router
+    private router: Router,
+    private alertControllerService: AlertcontrollerService
   ) {}
 
   ngOnInit() {
@@ -58,8 +60,11 @@ export class SignupPage implements OnInit {
     }
   }
 
-  submitForm(): boolean {
-    this.cadastrar();
-    return true;
+  async submitForm(): Promise<boolean> {
+    const confirmed = await this.alertControllerService.presentConfirm('Você confirma o cadastro com os dados fornecidos?');
+    if (confirmed) {
+      this.cadastrar();
+    }
+    return confirmed;
   }
 }

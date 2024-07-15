@@ -45,10 +45,16 @@ export class PostPage implements OnInit {
   }
 
   ngOnInit() {
-    this.loadUserData().then(() => {
-      console.log('User data loaded:', this.userData);
-    }).catch(error => {
-      console.error('Error loading user data:', error);
+    this.afAuth.authState.subscribe(user => {
+      if (user) {
+        this.loadUserData().then(() => {
+          console.log('User data loaded:', this.userData);
+        }).catch(error => {
+          console.error('Error loading user data:', error);
+        });
+      } else {
+        this.router.navigate(['/signin']);
+      }
     });
   }
   
@@ -63,6 +69,7 @@ export class PostPage implements OnInit {
       this.errorMessage = 'Erro ao carregar os dados do usuário. Por favor, tente novamente.';
     }
   }
+  
 
   async openDateSelector(ev: any) {
     const productionDateControl = this.postForm.get('productionDate');
@@ -99,6 +106,7 @@ export class PostPage implements OnInit {
 
   postItem() {
     if (this.postForm.valid) {
+      console.log('Attempting to post item with userData:', this.userData);
       if (this.userData && this.userData.uid) {
         const timestamp = new Date().getTime();
         const imageName = this.selectedFile ? `post_${timestamp}_${this.selectedFile.name}` : '';
@@ -109,11 +117,10 @@ export class PostPage implements OnInit {
         uploadTask.snapshotChanges().pipe(
           finalize(() => {
             fileRef.getDownloadURL().subscribe(url => {
-              const newPostId = this.firestore.createId(); // Generate a unique ID for the post
-              console.log("Posting with user data:", this.userData);
+              const newPostId = this.firestore.createId();
   
               const postData = {
-                postId: newPostId, // Include the postId in the postData
+                postId: newPostId,
                 title: this.postForm.value.title,
                 productionDate: this.postForm.value.productionDate,
                 price: this.postForm.value.price,
@@ -148,7 +155,8 @@ export class PostPage implements OnInit {
       this.errorMessage = 'Por favor, preencha todos os campos corretamente.';
     }
   }
-
+  
+  
   getMinDate(): string {
     const today = new Date();
     return today.toISOString();

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { FirebaseService } from 'src/app/model/service/firebase-service.service';
+import { AlertcontrollerService } from '../../../../model/service/alert-controller.service'
 
 @Component({
   selector: 'app-details',
@@ -16,7 +17,8 @@ export class DetailsPage implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private firebaseService: FirebaseService
+    private firebaseService: FirebaseService,
+    private alertControllerService: AlertcontrollerService
   ) { }
 
   ngOnInit() {
@@ -56,22 +58,25 @@ export class DetailsPage implements OnInit {
     }
   }
 
-  addToCart() {
+  async addToCart() {
     if (this.item && this.quantity && this.quantity > 0 && this.quantity <= this.item.quantity) {
-      console.log('Item selecionado:', this.item);
-      console.log('Quantidade selecionada:', this.quantity);
-  
-      const requiredFields = ['postId', 'title', 'price', 'nome', 'telefone'];
-      const missingFields = requiredFields.filter(field => !this.item[field]);
-      
-      if (missingFields.length > 0) {
-        console.error(`Campos obrigatórios do item estão faltando: ${missingFields.join(', ')}`);
-        return;
-      }
+      const confirmed = await this.alertControllerService.presentConfirm('Você confirma a adição deste item ao carrinho?');
+      if (confirmed) {
+        console.log('Item selecionado:', this.item);
+        console.log('Quantidade selecionada:', this.quantity);
+    
+        const requiredFields = ['postId', 'title', 'price', 'nome', 'telefone'];
+        const missingFields = requiredFields.filter(field => !this.item[field]);
+        
+        if (missingFields.length > 0) {
+          console.error(`Campos obrigatórios do item estão faltando: ${missingFields.join(', ')}`);
+          return;
+        }
 
-      this.firebaseService.addToCart(this.item, this.quantity)
-        .then(() => console.log(`Item ${this.item.title} adicionado ao carrinho com sucesso.`))
-        .catch(error => console.error('Erro ao adicionar item ao carrinho:', error));
+        this.firebaseService.addToCart(this.item, this.quantity)
+          .then(() => console.log(`Item ${this.item.title} adicionado ao carrinho com sucesso.`))
+          .catch(error => console.error('Erro ao adicionar item ao carrinho:', error));
+      }
     } else {
       console.error('Quantidade inválida ou item não selecionado.');
     }
